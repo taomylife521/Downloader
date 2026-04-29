@@ -1024,4 +1024,39 @@ public abstract class DownloadIntegrationTest : BaseTestClass, IDisposable
 
         File.Delete(FilePath);
     }
+
+    [Fact]
+    public async Task CancellationTokenStopDownloadDirectlyTest()
+    {
+        // arrange
+        FileSize = 102400;
+        FileData = DummyData.GenerateOrderedBytes(FileSize);
+        Url = DummyFileHelper.GetFileWithNameUrl(Filename, FileSize);
+        Config.BufferBlockSize = 512;
+        Config.ChunkCount = 4;
+        var progressPercentage = 0.0;
+        var ct = new CancellationTokenSource();
+
+        // act
+        Downloader.DownloadProgressChanged += async (_, e) => {
+            progressPercentage = e.ProgressPercentage;
+            if (!ct.IsCancellationRequested && progressPercentage >= 0.5)
+            {
+                await ct.CancelAsync();
+            }
+        };
+
+        await Downloader.DownloadFileTaskAsync(Url, FilePath, ct.Token);
+
+        // assert
+        Assert.True(Downloader.IsCancelled);
+        Assert.True(progressPercentage >= 0.5);
+        Assert.False(File.Exists(FilePath));
+        Assert.True(Downloader.Package.SaveProgress < 100.0);
+        Assert.False(Downloader.Package.IsSaveComplete);
+        Assert.False(Downloader.Package.IsSaving);
+        Assert.Equal(DownloadStatus.Stopped, Downloader.Package.Status);
+        Assert.Equal(FileSize, Downloader.Package.TotalFileSize);
+        Assert.InRange(progressPercentage, 0.5, 99);
+    }
 }

@@ -259,7 +259,7 @@ public abstract class AbstractDownloadService : IDownloadService, IDisposable, I
     /// <summary>
     /// Cancels the current download operation.
     /// </summary>
-    public virtual void CancelAsync()
+    public void CancelAsync()
     {
         GlobalCancellationTokenSource?.Cancel(true);
         Resume();
@@ -269,7 +269,7 @@ public abstract class AbstractDownloadService : IDownloadService, IDisposable, I
     /// Cancels the current download operation asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous cancellation operation.</returns>
-    public virtual async Task CancelTaskAsync()
+    public async Task CancelTaskAsync()
     {
         CancelAsync();
         if (_taskCompletion != null)
