@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFrameworks>net8.0;net9.0;net10.0;</TargetFrameworks>
         <LangVersion>latestMajor</LangVersion>
-        <Version>5.3.0</Version>
+        <Version>5.4.0</Version>
         <Title>Downloader</Title>
         <Authors>Behzad Khosravifar</Authors>
         <Company>bezzad</Company>
@@ -11,9 +11,7 @@
         <RepositoryUrl>https://github.com/bezzad/Downloader</RepositoryUrl>
         <PackageTags>download-manager, downloader, download, idm, internet, streaming, download-file, stream-downloader, multipart-download</PackageTags>
         <PackageReleaseNotes>
-            * Fixed issue #223: Downloads fail when URL path contains square brackets.
-             - The issue was caused by incorrect URL encoding of square brackets in the download URL. 
-             - This has been resolved to ensure proper handling of such URLs.
+            * Fixed issue #228: IsAotCompatible and PublishAot properties added to enable AOT compilation for .NET 8 and later.
         </PackageReleaseNotes>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>Downloader.snk</AssemblyOriginatorKeyFile>
@@ -32,7 +30,7 @@
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
-    <!-- Enable AOT only when explicitly requested -->
+    <!-- Enable AOT Native Package -->
     <PropertyGroup>
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
