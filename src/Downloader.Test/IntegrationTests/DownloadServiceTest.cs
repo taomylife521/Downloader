@@ -1025,7 +1025,7 @@ public class DownloadServiceTest : DownloadService
                 stream.Seek(totalSize, SeekOrigin.Begin);
                 var metadata = new byte[metadataSize];
                 await stream.ReadExactlyAsync(metadata);
-                var package = Serializer.Deserialize<DownloadPackage>(metadata);
+                var package = Serializer.Deserialize(metadata);
                 receivedBytesSizeOnStopping = package.Chunks.Sum(c => c.Position);
 
                 Assert.True(file.Length > totalSize, "Downloading file should be pre-allocated to total size + metadata size");

@@ -8,10 +8,23 @@ using System.Threading.Tasks;
 
 namespace Downloader;
 
+public class PackageInfo
+{
+    /// <summary>
+    /// Gets or sets the total size of the file to be downloaded.
+    /// </summary>
+    public long TotalFileSize { get; set; }
+
+    /// <summary>
+    /// Gets or sets the chunks of the file being downloaded.
+    /// </summary>
+    public Chunk[] Chunks { get; set; }
+}
+
 /// <summary>
 /// Represents a package containing information about a download operation.
 /// </summary>
-public class DownloadPackage : IDisposable, IAsyncDisposable
+public class DownloadPackage : PackageInfo, IDisposable, IAsyncDisposable
 {
     private readonly SemaphoreSlim _stateSemaphore = new(1, 1);
 
@@ -41,22 +54,12 @@ public class DownloadPackage : IDisposable, IAsyncDisposable
     public string[] Urls { get; set; }
 
     /// <summary>
-    /// Gets or sets the total size of the file to be downloaded.
-    /// </summary>
-    public long TotalFileSize { get; set; }
-
-    /// <summary>
     /// Gets or sets the name of the file to be saved.
     /// </summary>
     public string FileName { get; set; }
 
     public string DownloadingFileExtension { get => field ?? ""; set; }
     [JsonIgnore] public string DownloadingFileName => FileName + DownloadingFileExtension;
-
-    /// <summary>
-    /// Gets or sets the chunks of the file being downloaded.
-    /// </summary>
-    public Chunk[] Chunks { get; set; }
 
     /// <summary>
     /// Gets the total size of the received bytes.

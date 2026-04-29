@@ -7,14 +7,12 @@ public interface IBinarySerializer
     /// </summary>
     /// <returns>The serialized bytes</returns>
     /// <param name="value">Value to serialize</param>
-    /// <typeparam name="T">The parameter type</typeparam>
-    byte[] Serialize<T>(T value);
+    byte[] Serialize(PackageInfo value);
 
     /// <summary>
     /// Deserialize the specified bytes.
     /// </summary>
-    /// <returns>The deserialized object</returns>
+    /// <returns>The deserialized PackageInfo object</returns>
     /// <param name="bytes">The serialized bytes</param>
-    /// <typeparam name="T">The return type</typeparam>
-    T Deserialize<T>(byte[] bytes, int offset = 0, int count = - 1);
+    PackageInfo Deserialize(byte[] bytes, int offset = 0, int count = -1);
 }

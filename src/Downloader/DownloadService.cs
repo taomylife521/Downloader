@@ -211,11 +211,11 @@ public class DownloadService : AbstractDownloadService
                     return false; // incomplete metadata
 
                 // Deserialize only the exact slice (not the full rented array)
-                var package = Serializer.Deserialize<DownloadPackage>(rented, 0, (int)metadataSize);
-                if (package?.TotalFileSize != Package.TotalFileSize) // file on server was changed!
+                var packageInfo = Serializer.Deserialize(rented, 0, (int)metadataSize);
+                if (packageInfo?.TotalFileSize != Package.TotalFileSize) // file on server was changed!
                     return false;
 
-                Package.Chunks = package.Chunks;
+                Package.Chunks = packageInfo.Chunks;
                 return true;
             }
             finally

@@ -6,22 +6,6 @@ public class JsonBinarySerializerTest(ITestOutputHelper output) : BaseTestClass(
 {
     IBinarySerializer serializer = new JsonBinarySerializer();
 
-    [Fact]
-    public void SerializeBinaryData()
-    {
-        // arrange
-        var data = DummyData.GenerateOrderedBytes(100_000);
-
-        // act
-        var serializedData = serializer.Serialize(data);
-        var deserializedData = serializer.Deserialize<byte[]>(serializedData);
-
-        // assert
-        Assert.NotNull(deserializedData);
-        Assert.Equal(data.Length, deserializedData.Length);
-        Assert.Equal(data, deserializedData);
-    }
-
     [Theory]
     [InlineData(0)]
     [InlineData(1000)]
@@ -51,13 +35,11 @@ public class JsonBinarySerializerTest(ITestOutputHelper output) : BaseTestClass(
         // act
         var serializedPackage = serializer.Serialize(package);
         data = data.Concat(serializedPackage).ToArray();
-        var deserializedPackage = serializer.Deserialize<DownloadPackage>(data, dataLength, serializedPackage.Length);
+        var deserializedPackage = serializer.Deserialize(data, dataLength, serializedPackage.Length);
 
         // assert
         Assert.NotNull(deserializedPackage);
-        Assert.Equal(package.FileName, deserializedPackage.FileName);
         Assert.Equal(package.TotalFileSize, deserializedPackage.TotalFileSize);
-        Assert.Equal(package.Urls, deserializedPackage.Urls);
         Assert.Equal(package.Chunks?.Length, deserializedPackage.Chunks?.Length);
         for (int i = 0; i < package.Chunks.Length; i++)
         {
